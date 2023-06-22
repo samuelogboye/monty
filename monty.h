@@ -58,8 +58,8 @@ typedef struct montyglob
 	FILE* script;
 } montyglob;
 
-/* from montyparse.c */
-void exitwrap(int exitcode, char *existring, stack_t *front);
+/* parse.c */
+void exit_true(int exitcode, char *existring, stack_t *front);
 
 /* opmath.c */
 void add(stack_t **front);
