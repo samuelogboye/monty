@@ -64,7 +64,7 @@ int montyparse(optype *ops)
 		if (mglob.buffer == NULL)
 		{
 			printf("Error: malloc failed\n");
-			exitwrap(EXIT_FAILURE, NULL, front);
+			exit_true(EXIT_FAILURE, NULL, front);
 		}
 		tok = strtok(mglob.buffer, "\n ");
 		if (tok != NULL)
@@ -78,7 +78,7 @@ int montyparse(optype *ops)
 				mode = STACKMODE;
 			else
 			{
-				while (val < MONTYOPCT && strcmp(tok, ops[element].opcode))
+				while (element < MONTYOPCT && strcmp(tok, ops[element].opcode))
 					element++;
 				if (element == 0)
 				{
