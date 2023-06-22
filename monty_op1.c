@@ -4,10 +4,10 @@
  * push - pushes a value onto the stack and updates pointers
  * @front: front of stack
  * @rear: rear of stack
- * @val: value to push
+ * @element: Element to push
  * @mode: stack or queue mode (put on top or bottom)
  */
-void push(stack_t **front, stack_t **rear, int val, int mode)
+void push(stack_t **front, stack_t **rear, int element, int mode)
 {
 	stack_t *ptr;
 
@@ -17,7 +17,7 @@ void push(stack_t **front, stack_t **rear, int val, int mode)
 		printf("Error: malloc failed\n");
 		exitwrap(EXIT_FAILURE, NULL, *front);
 	}
-	ptr->n = val;
+	ptr->n = element;
 	if (*front == NULL)
 	{
 		ptr->prev = NULL;
