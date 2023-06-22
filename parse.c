@@ -49,11 +49,11 @@ int is_num(char *s)
 }
 
 /**
- * montyparse - parser for monty script files
+ * parse_eff - parser for monty script files
  * @ops: array of opcodes and pointers to functions for them
  * Return: 0 if successful
  */
-int montyparse(optype *ops)
+int parse_eff(optype *ops)
 {
 	size_t len = 0, element, mode = STACKMODE;
 	stack_t *front = NULL, *rear = NULL;
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 	}
 	ops = initops();
 	mglob.linenum = 1;
-	montyparse(ops);
+	parse_eff(ops);
 	return (0);
 }
 

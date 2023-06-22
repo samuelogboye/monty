@@ -2,6 +2,7 @@
 
 /**
  * swap - swap top two values on stack and update top/bottom
+ * @front: topmost of stack
  * @rear: rear of stack
  */
 void swap(stack_t **front, stack_t **rear)
