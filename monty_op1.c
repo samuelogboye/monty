@@ -15,7 +15,7 @@ void push(stack_t **front, stack_t **rear, int element, int mode)
 	if (ptr == NULL)
 	{
 		printf("Error: malloc failed\n");
-		exitwrap(EXIT_FAILURE, NULL, *front);
+		exit_true(EXIT_FAILURE, NULL, *front);
 	}
 	ptr->n = element;
 	if (*front == NULL)
