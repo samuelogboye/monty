@@ -40,9 +40,9 @@ typedef struct instruction_s
 
 union montyfunctype
 {
-	void (*toponly)(stack_t **top);
-	void (*pushmode)(stack_t **top, stack_t **bot, int val, int mode);
-	void (*topbot)(stack_t **top, stack_t **bot);
+	void (*toponly)(stack_t **front);
+	void (*pushmode)(stack_t **front, stack_t **rear, int element, int mode);
+	void (*topbot)(stack_t **front, stack_t **rear);
 };
 
 typedef struct optype
@@ -59,26 +59,26 @@ typedef struct montyglob
 } montyglob;
 
 /* from montyparse.c */
-void exitwrap(int exitcode, char *existring, stack_t *top);
+void exitwrap(int exitcode, char *existring, stack_t *front);
 
 /* opmath.c */
-void add(stack_t **top);
-void sub(stack_t **top);
-void mul(stack_t **top);
-void _div(stack_t **top);
-void mod(stack_t **top);
+void add(stack_t **front);
+void sub(stack_t **front);
+void mul(stack_t **front);
+void _div(stack_t **front);
+void mod(stack_t **front);
 
 /* opstack.c */
-void push(stack_t **top, stack_t **bot, int val, int mode);
-void pop(stack_t **top);
-void swap(stack_t **top, stack_t **bot);
-void rotl(stack_t **top, stack_t **bot);
-void rotr(stack_t **top, stack_t **bot);
+void push(stack_t **front, stack_t **rear, int element, int mode);
+void pop(stack_t **front);
+void swap(stack_t **front, stack_t **rear);
+void rotl(stack_t **front, stack_t **rear);
+void rotr(stack_t **front, stack_t **rear);
 
 /* opprint.c */
-void pall(stack_t **top);
-void pint(stack_t **top);
-void pchar(stack_t **top);
-void pstr(stack_t **top);
+void pall(stack_t **front);
+void pint(stack_t **front);
+void pchar(stack_t **front);
+void pstr(stack_t **front);
 
 #endif /* MONTY_H */
