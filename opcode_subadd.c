@@ -3,7 +3,7 @@
 
 /**
  * sub - subtract top two stack elements. error if < 2 elements
- * @top: top of stack
+ * @front: topmost of stack
  */
 void sub(stack_t **front)
 {
@@ -26,7 +26,7 @@ void sub(stack_t **front)
 
 /**
  * add - add top two stack elements. error if < 2 elements
- * @top: top of stack
+ * @front: topmost of stack
  */
 void add(stack_t **front)
 {
