@@ -90,7 +90,7 @@ int montyparse(optype *ops)
 				else if (element < 4)
 					ops[element].func.topbot(&front, &rear);
 				else if (element < MONTYOPCT)
-					ops[val].func.toponly(&front);
+					ops[element].func.toponly(&front);
 				else
 				{
 					printf("L%ld: unknown instruction %s\n", mglob.linenum, tok);
