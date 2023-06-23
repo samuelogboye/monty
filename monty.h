@@ -59,6 +59,8 @@ typedef struct montyglob
         FILE* script;
 } montyglob;
 
+extern montyglob mglob;
+
 void exit_true(int exitcode, char *existring, stack_t *front);
 int is_num(char *s);
 

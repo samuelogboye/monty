@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static montyglob mglob;
 
 /**
  * exit_true - free things and exit the program. Print error message as needed

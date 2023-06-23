@@ -5,7 +5,7 @@
 
 #define MONTYOPCT 14
 
-static montyglob mglob;
+montyglob mglob;
 
 /**
  * _tokz - process a single token from the script file
