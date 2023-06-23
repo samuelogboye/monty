@@ -5,48 +5,54 @@
 
 #define MONTYOPCT 14
 
-static montyglob mglob;
-
 /**
- * exit_true - free things and exit the program. Print error message as needed
- * @exitcode: exit code
- * @exitstring: error string to print, if any
- * @front: topmost of stack (for freeing)
+ * _tokz - process a single token from the script file
+ * @ops: array of opcodes and pointers to functions for them
+ * @tok: token to be processed
+ * @front: pointer to the front of the stack
+ * @rear: pointer to the rear of the stack
+ * @mode: mode of operation (STACKMODE or QUEUEMODE)
+ * Return: 1 if the token was successfully processed, 0 otherwise
  */
-void exit_true(int exitcode, char *exitstring, stack_t *front)
+int _tokz(optype *ops, char *tok, stack_t **front, stack_t **rear, size_t mode)
 {
-	stack_t *ptr = front;
+	size_t element = 0;
 
-	if (exitstring != NULL)
-		fprintf(stderr, "L%lu: %s\n", mglob.linenum, exitstring);
-	while (front != NULL)
-	{
-		ptr = front->prev;
-		free(front);
-		front = ptr;
-	}
-	free(mglob.buffer);
-	fclose(mglob.script);
-	exit(exitcode);
-}
+	if (*tok == '#' || !strcmp(tok, "nop"))
+		return (1);
 
-/**
- * is_num - checks if a string is a number
- * @s: string to check
- * Return: 1 if numeric, 0 otherwise
- */
-int is_num(char *s)
-{
-	if (*s == '-')
+	if (!strcmp(tok, "queue"))
+		mode = QUEUEMODE;
+	else if (!strcmp(tok, "stack"))
+		mode = STACKMODE;
+	else
 	{
-		s++;
-		if (*s < '0' || *s > '9')
-			return (0);
-		s++;
+		while (element < MONTYOPCT && strcmp(tok, ops[element].opcode))
+			element++;
+
+		if (element == 0)
+		{
+			tok = strtok(NULL, "\n ");
+			if (tok == NULL || !is_num(tok))
+			{
+				exit_true(EXIT_FAILURE, "usage: push integer", *front);
+			}
+			ops[0].func.pushmode(front, rear, atoi(tok), mode);
+		}
+		else if (element < 4)
+		{
+			ops[element].func.topbot(front, rear);
+		}
+		else if (element < MONTYOPCT)
+		{
+			ops[element].func.toponly(front);
+		}
+		else
+		{
+			fprintf(stderr, "L%ld: unknown instruction %s\n", mglob.linenum, tok);
+			exit_true(EXIT_FAILURE, NULL, *front);
+		}
 	}
-	while (*s != 0)
-		if (*s < '0' || *s++ > '9')
-			return (0);
 	return (1);
 }
 
@@ -57,7 +63,7 @@ int is_num(char *s)
  */
 int parse_eff(optype *ops)
 {
-	size_t len = 0, element, mode = STACKMODE;
+	size_t len = 0, mode = STACKMODE;
 	stack_t *front = NULL, *rear = NULL;
 	char *tok;
 
@@ -71,33 +77,13 @@ int parse_eff(optype *ops)
 		tok = strtok(mglob.buffer, "\n ");
 		if (tok != NULL)
 		{
-			element = 0;
-			if (*tok == '#' || !strcmp(tok, "nop"))
-				;
-			else if (!strcmp(tok, "queue"))
-				mode = QUEUEMODE;
-			else if (!strcmp(tok, "stack"))
-				mode = STACKMODE;
-			else
+			if (!_tokz(ops, tok, &front, &rear, mode))
 			{
-				while (element < MONTYOPCT && strcmp(tok, ops[element].opcode))
-					element++;
-				if (element == 0)
-				{
-					tok = strtok(NULL, "\n ");
-					if (tok == NULL || !is_num(tok))
-						exit_true(EXIT_FAILURE, "usage: push integer", front);
-					ops[0].func.pushmode(&front, &rear, atoi(tok), mode);
-				}
-				else if (element < 4)
-					ops[element].func.topbot(&front, &rear);
-				else if (element < MONTYOPCT)
-					ops[element].func.toponly(&front);
-				else
-				{
-					fprintf(stderr, "L%ld: unknown instruction %s\n", mglob.linenum, tok);
-					exit_true(EXIT_FAILURE, NULL, front);
-				}
+				free(mglob.buffer);
+				mglob.buffer = NULL;
+				len = 0;
+				mglob.linenum++;
+				continue;
 			}
 		}
 		free(mglob.buffer);
