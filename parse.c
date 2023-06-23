@@ -18,7 +18,7 @@ void exit_true(int exitcode, char *exitstring, stack_t *front)
 	stack_t *ptr = front;
 
 	if (exitstring != NULL)
-		printf("L%lu: %s\n", mglob.linenum, exitstring);
+		fprintf(stderr, "L%lu: %s\n", mglob.linenum, exitstring);
 	while (front != NULL)
 	{
 		ptr = front->prev;
