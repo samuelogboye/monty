@@ -60,6 +60,7 @@ typedef struct montyglob
 } montyglob;
 
 void exit_true(int exitcode, char *existring, stack_t *front);
+int is_num(char *s);
 
 void add(stack_t **front);
 void sub(stack_t **front);
