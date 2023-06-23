@@ -30,4 +30,3 @@ void pchar(stack_t **front)
 		exit_true(EXIT_FAILURE, "can't pchar, value out of range", *front);
 	printf("%c\n", ptr->n);
 }
-

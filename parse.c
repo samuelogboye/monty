@@ -1,5 +1,7 @@
 #define _GNU_SOURCE
 #include "monty.h"
+#include <stdio.h>
+#include <string.h>
 
 #define MONTYOPCT 14
 
@@ -149,23 +151,23 @@ optype *initops()
 
 /**
  * main - parse a monty script file
- * @argc: number of arguments
- * @argv: argument array
+ * @ac: number of arguments
+ * @av: argument array
  * Return: EXIT_SUCCESS on success, EXIT_FAILURE otherwise
  */
-int main(int argc, char *argv[])
+int main(int ac, char *av[])
 {
 	optype *ops;
 
-	if (argc != 2)
+	if (ac != 2)
 	{
 		printf("USAGE: monty file\n");
 		return (EXIT_FAILURE);
 	}
-	mglob.script = fopen(argv[1], "r");
+	mglob.script = fopen(av[1], "r");
 	if (mglob.script == NULL)
 	{
-		printf("Error: Can't open file %s\n", argv[1]);
+		printf("Error: Can't open file %s\n", av[1]);
 		return (EXIT_FAILURE);
 	}
 	ops = initops();

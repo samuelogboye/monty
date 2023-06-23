@@ -69,4 +69,3 @@ void _div(stack_t **front)
 		ptr->n /= number;
 	}
 }
-

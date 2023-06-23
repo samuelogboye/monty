@@ -37,4 +37,3 @@ void rotl(stack_t **front, stack_t **rear)
 	*rear = ptrf;
 	ptrf->prev = NULL;
 }
-

@@ -59,24 +59,20 @@ typedef struct montyglob
         FILE* script;
 } montyglob;
 
-/* from montyparse.c */
 void exit_true(int exitcode, char *existring, stack_t *front);
 
-/* opmath.c */
 void add(stack_t **front);
 void sub(stack_t **front);
 void mul(stack_t **front);
 void _div(stack_t **front);
 void mod(stack_t **front);
 
-/* opstack.c */
 void push(stack_t **front, stack_t **rear, int element, int mode);
 void pop(stack_t **front);
 void swap(stack_t **front, stack_t **rear);
 void rotl(stack_t **front, stack_t **rear);
 void rotr(stack_t **front, stack_t **rear);
 
-/* opprint.c */
 void pall(stack_t **front);
 void pint(stack_t **front);
 void pchar(stack_t **front);

@@ -45,4 +45,3 @@ void add(stack_t **front)
 		ptr->n += number;
 	}
 }
-
