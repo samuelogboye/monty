@@ -8,62 +8,93 @@
 static montyglob mglob;
 
 /**
+ * process_token - process a single token from the script file
+ * @ops: array of opcodes and pointers to functions for them
+ * @tok: token to be processed
+ * @front: pointer to the front of the stack
+ * @rear: pointer to the rear of the stack
+ * @mode: mode of operation (STACKMODE or QUEUEMODE)
+ * Return: 1 if the token was successfully processed, 0 otherwise
+ */
+int process_token(optype *ops, char *tok, stack_t **front, stack_t **rear, size_t mode)
+{
+        size_t element = 0;
+
+        if (*tok == '#' || !strcmp(tok, "nop"))
+                return 1;
+
+        if (!strcmp(tok, "queue"))
+                mode = QUEUEMODE;
+        else if (!strcmp(tok, "stack"))
+                mode = STACKMODE;
+        else
+        {
+                while (element < MONTYOPCT && strcmp(tok, ops[element].opcode))
+                        element++;
+
+                if (element == 0)
+                {
+                        tok = strtok(NULL, "\n ");
+                        if (tok == NULL || !is_num(tok))
+                        {
+                                exit_true(EXIT_FAILURE, "usage: push integer", *front);
+                        }
+                        ops[0].func.pushmode(front, rear, atoi(tok), mode);
+                }
+                else if (element < 4)
+                {
+                        ops[element].func.topbot(front, rear);
+                }
+                else if (element < MONTYOPCT)
+                {
+                        ops[element].func.toponly(front);
+                }
+                else
+                {
+                        fprintf(stderr, "L%ld: unknown instruction %s\n", mglob.linenum, tok);
+                        exit_true(EXIT_FAILURE, NULL, *front);
+                }
+        }
+        return 1;
+}
+
+/**
  * parse_eff - parser for monty script files
  * @ops: array of opcodes and pointers to functions for them
  * Return: 0 if successful
  */
 int parse_eff(optype *ops)
 {
-	size_t len = 0, element, mode = STACKMODE;
-	stack_t *front = NULL, *rear = NULL;
-	char *tok;
+        size_t len = 0, mode = STACKMODE;
+        stack_t *front = NULL, *rear = NULL;
+        char *tok;
 
-	while (getline(&mglob.buffer, &len, mglob.script) > 0)
-	{
-		if (mglob.buffer == NULL)
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			exit_true(EXIT_FAILURE, NULL, front);
-		}
-		tok = strtok(mglob.buffer, "\n ");
-		if (tok != NULL)
-		{
-			element = 0;
-			if (*tok == '#' || !strcmp(tok, "nop"))
-				;
-			else if (!strcmp(tok, "queue"))
-				mode = QUEUEMODE;
-			else if (!strcmp(tok, "stack"))
-				mode = STACKMODE;
-			else
-			{
-				while (element < MONTYOPCT && strcmp(tok, ops[element].opcode))
-					element++;
-				if (element == 0)
-				{
-					tok = strtok(NULL, "\n ");
-					if (tok == NULL || !is_num(tok))
-						exit_true(EXIT_FAILURE, "usage: push integer", front);
-					ops[0].func.pushmode(&front, &rear, atoi(tok), mode);
-				}
-				else if (element < 4)
-					ops[element].func.topbot(&front, &rear);
-				else if (element < MONTYOPCT)
-					ops[element].func.toponly(&front);
-				else
-				{
-					fprintf(stderr, "L%ld: unknown instruction %s\n", mglob.linenum, tok);
-					exit_true(EXIT_FAILURE, NULL, front);
-				}
-			}
-		}
-		free(mglob.buffer);
-		mglob.buffer = NULL;
-		len = 0;
-		mglob.linenum++;
-	}
-	exit_true(EXIT_SUCCESS, NULL, front);
-	return (0);
+        while (getline(&mglob.buffer, &len, mglob.script) > 0)
+        {
+                if (mglob.buffer == NULL)
+                {
+                        fprintf(stderr, "Error: malloc failed\n");
+                        exit_true(EXIT_FAILURE, NULL, front);
+                }
+                tok = strtok(mglob.buffer, "\n ");
+                if (tok != NULL)
+                {
+                        if (!process_token(ops, tok, &front, &rear, mode))
+                        {
+                                free(mglob.buffer);
+                                mglob.buffer = NULL;
+                                len = 0;
+                                mglob.linenum++;
+                                continue;
+                        }
+                }
+                free(mglob.buffer);
+                mglob.buffer = NULL;
+                len = 0;
+                mglob.linenum++;
+        }
+        exit_true(EXIT_SUCCESS, NULL, front);
+        return 0;
 }
 
 /**
