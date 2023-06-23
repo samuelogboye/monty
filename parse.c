@@ -4,8 +4,8 @@
 #include <string.h>
 
 #define MONTYOPCT 14
+int _tokz(optype *ops, char *tok, stack_t **front, stack_t **rear, size_t mode);
 
-montyglob mglob;
 
 /**
  * _tokz - process a single token from the script file
