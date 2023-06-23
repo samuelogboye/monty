@@ -65,7 +65,7 @@ int parse_eff(optype *ops)
 	{
 		if (mglob.buffer == NULL)
 		{
-			printf("Error: malloc failed\n");
+			fprintf(stderr, "Error: malloc failed\n");
 			exit_true(EXIT_FAILURE, NULL, front);
 		}
 		tok = strtok(mglob.buffer, "\n ");
@@ -95,7 +95,7 @@ int parse_eff(optype *ops)
 					ops[element].func.toponly(&front);
 				else
 				{
-					printf("L%ld: unknown instruction %s\n", mglob.linenum, tok);
+					fprintf(stderr, "L%ld: unknown instruction %s\n", mglob.linenum, tok);
 					exit_true(EXIT_FAILURE, NULL, front);
 				}
 			}
@@ -161,13 +161,13 @@ int main(int ac, char *av[])
 
 	if (ac != 2)
 	{
-		printf("USAGE: monty file\n");
+		fprintf(stderr, "USAGE: monty file\n");
 		return (EXIT_FAILURE);
 	}
 	mglob.script = fopen(av[1], "r");
 	if (mglob.script == NULL)
 	{
-		printf("Error: Can't open file %s\n", av[1]);
+		fprintf(stderr, "Error: Can't open file %s\n", av[1]);
 		return (EXIT_FAILURE);
 	}
 	ops = initops();
